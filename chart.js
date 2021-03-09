@@ -20,7 +20,7 @@ var x = d3.scaleTime()
   // Add Y axis
 var y = d3.scaleLinear()
   .domain([0, d3.max(data, function(d) { return +d.covid_cases_m; })])
-  .range([ height, 0 ]);
+  .range([ height, 0 ]).nice();
 
 var svg = d3.select("#"+chart_id)
 .append("svg")
@@ -30,10 +30,12 @@ var svg = d3.select("#"+chart_id)
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("g")
+    .attr("class", "axis")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x));
+    .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b")));
 
 svg.append("g")
+    .attr("class", "axis")  
     .call(d3.axisLeft(y));
 
   // Add the area
