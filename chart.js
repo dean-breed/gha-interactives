@@ -38,6 +38,15 @@ svg.append("g")
     .attr("class", "axis")  
     .call(d3.axisLeft(y));
 
+svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0-margin.left)
+    .attr("x",0 - (height / 1.8))
+    .attr("dy", "1em")
+    .attr('class','yaxistitle')
+    .style("text-anchor", "middle")
+    .text("I want to call it this");
+
   // Add the area
 svg.append("path")
     .datum(data)
