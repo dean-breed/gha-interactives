@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="chart.js"></script>
+    <style>
+      @font-face {
+        font-family: 'Averta';
+        src: url('fonts/Averta-Regular.woff');
+        font-weight: normal;
+      }
+      @font-face {
+        font-family: 'Averta';
+        src: url('fonts/Averta-Bold.woff');
+        font-weight: bold;
+      }
+      @font-face {
+        font-family: 'Averta';
+        src: url('fonts/Averta-BoldItalic.woff');
+        font-weight: bold;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'Averta';
+        src: url('fonts/Averta-RegularItalic.woff');
+        font-weight: normal;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'Averta';
+        src: url('fonts/Averta-Semibold.woff');
+        font-weight:600;
+      }
+      @font-face {
+        font-family: 'Averta';
+        src: url('fonts/Averta-SemiboldItalic.woff');
+        font-weight:600;
+        font-style: italic;
+      }
+      .axis text {font-size:10px; font-weight: 100; fill:#443e42 ; font-family: 'Averta',sans-serif; }
+      .axis line {stroke:#a9a6aa;}
+      .axis path {stroke:#a9a6aa;}
+      .xaxis text {font-size:10px; font-weight: 100; fill:#443e42 ; font-family: 'Averta',sans-serif; }
+      .xaxis line {stroke:transparent;}
+      .xaxis path {stroke:#a9a6aa;}
+      .yaxistitle {font-size:10px; font-weight: 100; fill:#443e42; font-family: 'Averta',sans-serif; }
+      .yaxis text {font-size:10px; font-weight: 100; fill:#443e42; font-family: 'Averta',sans-serif; }
+      .yaxis line {stroke:#a9a6aa;}
+      .yaxis path {stroke:transparent;}
+      .tooltip {pointer-events: none;}
+      .tooltip-bg {pointer-events: none;}
+      .chart-wrapper-third {float:left; width: 33%;}
+      .chart-wrapper-half {float:left; width:50%;}
+      .chart-wrapper-full {float:left; width:100%;}
+      h1 {font-family: 'Averta';float:left; width: 100%;color:#443e42;}
+      h2 {font-family: 'Averta';font-size:25px;color:#443e42;}
+      body, select, label {font-family: 'Averta';color:#443e42;}
+      select {font-size:15px;}
+      .spacing {margin-bottom:5px}
+    </style>
+</head>
+  <body>
+    <h1>Test COVID chart</h1>
+    <div class="chart-wrapper-full">
+      <h2>Overall</h2>
+      <div id="chart1"></div>
+    </div>
+    <script>
+        var margin2 = {top: 10, right: 300, bottom: 80, left: 50},
+        width2 = 800 - margin2.left - margin2.right,
+        height2 = 300 - margin2.top - margin2.bottom;
+        d3.csv("covid-cases-cumulative.csv",function(data){
+            var chart_config = {
+                "chart_type": "bar",
+                "chart_direction": "horizontal",
+                "x_axis": ["org_type", "year"],
+                "x_axis_label": "",
+                "y_axis": ["value"],
+                "y_axis_label": "Covid cases (millions)",
+                "y_axis_scale": function(d){return d},
+                "tooltip_type": function(d){return d},
+                "colour_axis": ["flow_type"],
+                "colour_axis_scale": d3.scaleOrdinal().domain(["ODA", "OOF", "Other flows", "Not specified"]).range([pal.blue1,pal.blue2,pal.blue3,pal.blue4])
+            };
+            draw_area_chart(data, "chart1", margin2, width2, height2,chart_config);
+        })
+    </script>
+  </body>
+</html>
