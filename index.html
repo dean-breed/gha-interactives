@@ -80,7 +80,7 @@
                 "y_axis_scale": function(d){return d},
                 "tooltip_type": function(d){return d},
                 "colour_axis": ["flow_type"],
-                "colour_axis_scale": d3.scaleOrdinal().domain(["ODA", "OOF", "Other flows", "Not specified"]).range([pal.blue1,pal.blue2,pal.blue3,pal.blue4])
+                "colour_axis_scale": d3.scaleOrdinal().domain(["ODA", "OOF", "Other flows", "Not specified"]).range([pal.orange1,pal.blue2,pal.blue3,pal.blue4])
             };
             draw_area_chart(data, "chart1", margin2, width2, height2,chart_config);
         })

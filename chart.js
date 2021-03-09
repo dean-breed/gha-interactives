@@ -1,5 +1,5 @@
 var pal = {
-    "blue1": "#0089CC",
+    "orange1": "#EC652B",
     "blue2": "#88BAE5",
     "blue3": "#0C457B",
     "blue4": "#A9A6AA"
@@ -42,7 +42,7 @@ svg.append("g")
 svg.append("path")
     .datum(data)
     .attr("fill", pal.blue2)
-    .attr("stroke", pal.blue1)
+    .attr("stroke", pal.orange1)
     .attr("stroke-width", 1.5)
     .attr("d", d3.area()
       .x(function(d) { return x(d.dd) })
