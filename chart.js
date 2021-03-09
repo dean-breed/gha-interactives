@@ -1,8 +1,8 @@
 var pal = {
     "orange1": "#EC652B",
-    "blue2": "#EC652B",
-    "blue3": "#EC652B",
-    "blue4": "#EC652B"
+    "orange2": "#EC652B",
+    "orange3": "#EC652B",
+    "orange4": "#EC652B"
   };
 
 function draw_area_chart(data, chart_id, margin, width, height,chart_config){
@@ -41,7 +41,7 @@ svg.append("g")
   // Add the area
 svg.append("path")
     .datum(data)
-    .attr("fill", pal.blue2)
+    .attr("fill", pal.orange2)
     .attr("stroke", pal.orange1)
     .attr("stroke-width", 1.5)
     .attr("d", d3.area()
