@@ -1,8 +1,8 @@
 var pal = {
     "orange1": "#EC652B",
-    "blue2": "#88BAE5",
-    "blue3": "#0C457B",
-    "blue4": "#A9A6AA"
+    "blue2": "#EC652B",
+    "blue3": "#EC652B",
+    "blue4": "#EC652B"
   };
 
 function draw_area_chart(data, chart_id, margin, width, height,chart_config){
