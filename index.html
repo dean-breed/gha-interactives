@@ -2,7 +2,7 @@
   <head>
     <script src="https://d3js.org/d3.v4.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-    <script src="chart.js"></script>
+	<script src="charts.js"></script>
     <style>
       @font-face {
         font-family: 'Averta';
@@ -60,10 +60,35 @@
     </style>
 </head>
   <body>
-    <h1>Test COVID chart</h1>
+	<h1>Reported COVID-19 cases continue to rise in GHRP countries, especially South America</h1>
     <div class="chart-wrapper-full">
-      <h2>Overall</h2>
+      <h2>Number of reported COVID-19 cases by region</h2>
       <div id="chart1"></div>
+    </div>
+    <script>
+        var margin2 = {top: 10, right: 300, bottom: 80, left: 50},
+        width2 = 800 - margin2.left - margin2.right,
+        height2 = 300 - margin2.top - margin2.bottom;
+        d3.csv("covid-cases-regions.csv",function(data){
+            var chart_config = {
+                "chart_type": "bar",
+                "chart_direction": "horizontal",
+                "x_axis": ["date"],
+                "x_axis_label": "",
+                "y_axis": ["value"],
+                "y_axis_label": "",
+                "y_axis_scale": function(d){return d},
+                "tooltip_type": function(d){return d},
+                "colour_axis": ["flow_type"],
+                "colour_axis_scale": d3.scaleOrdinal().domain(["cases"]).range([pal.orange1])
+            };
+            draw_area_figure1(data, "chart1", margin2, width2, height2, chart_config);
+        })
+    </script>
+    <h1>Humanitarian grants have failed to keep pace with the increasing scale of the COVID-19 crisis</h1>
+    <div class="chart-wrapper-full">
+      <h2>Cumulative number of reported COVID-19 cases against humanitarian grant funding</h2>
+      <div id="chart2a"></div>
     </div>
     <script>
         var margin2 = {top: 10, right: 300, bottom: 80, left: 50},
@@ -73,17 +98,65 @@
             var chart_config = {
                 "chart_type": "bar",
                 "chart_direction": "horizontal",
-                "x_axis": ["org_type", "year"],
+                "x_axis": ["date"],
                 "x_axis_label": "",
                 "y_axis": ["value"],
                 "y_axis_label": "Covid cases (millions)",
                 "y_axis_scale": function(d){return d},
                 "tooltip_type": function(d){return d},
                 "colour_axis": ["flow_type"],
-                "colour_axis_scale": d3.scaleOrdinal().domain(["ODA", "OOF", "Other flows", "Not specified"]).range([pal.blue1,pal.blue2,pal.blue3,pal.blue4])
+                "colour_axis_scale": d3.scaleOrdinal().domain(["cases"]).range([pal.orange1])
             };
-            draw_area_chart(data, "chart1", margin2, width2, height2,chart_config);
+            draw_area_figure2a(data, "chart2a", margin2, width2, height2, chart_config);
+        })
+    </script>
+<div class="chart-wrapper-full">
+      <div id="chart2b"></div>
+    </div>
+    <script>
+        var margin2 = {top: 10, right: 300, bottom: 80, left: 50},
+        width2 = 800 - margin2.left - margin2.right,
+        height2 = 300 - margin2.top - margin2.bottom;
+        d3.csv("funding-area.csv",function(data){
+            var chart_config = {
+                "chart_type": "bar",
+                "chart_direction": "horizontal",
+                "x_axis": ["date"],
+                "x_axis_label": "",
+                "y_axis": ["value"],
+                "y_axis_label": "Covid cases (millions)",
+                "y_axis_scale": function(d){return d},
+                "tooltip_type": function(d){return d},
+                "colour_axis": ["flow_type"],
+                "colour_axis_scale": d3.scaleOrdinal().domain(["cases"]).range([pal.orange1])
+            };
+            draw_area_figure2b(data, "chart2b", margin2, width2, height2, chart_config);
         })
     </script>
   </body>
 </html>
+<h1>NGOs have received a small fraction of direct funding while UN agencies have received the most</h1>
+    <div class="chart-wrapper-full">
+      <h2>Percentage of funding received by recipient organisation types April - December 2020</h2>
+      <div id="chart8"></div>
+    </div>
+    <script>
+        var margin2 = {top: 10, right: 300, bottom: 80, left: 50},
+        width2 = 800 - margin2.left - margin2.right,
+        height2 = 300 - margin2.top - margin2.bottom;
+        d3.csv("ngos-share-area.csv",function(data){
+            var chart_config = {
+                "chart_type": "bar",
+                "chart_direction": "horizontal",
+                "x_axis": ["date"],
+                "x_axis_label": "",
+                "y_axis": ["value"],
+                "y_axis_label": "Covid cases (millions)",
+                "y_axis_scale": function(d){return d},
+                "tooltip_type": function(d){return d},
+                "colour_axis": ["flow_type"],
+                "colour_axis_scale": d3.scaleOrdinal().domain(["cases"]).range([pal.orange1])
+            };
+            draw_area_figure8(data, "chart8", margin2, width2, height2, chart_config);
+        })
+    </script>
