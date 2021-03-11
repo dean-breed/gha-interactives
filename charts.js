@@ -3,7 +3,8 @@ var pal = {
     "orange2": "#F6BB9E",
     "orange3": "#F28E5F",
     "orange4": "#D85C32",
-	 "orange5": "#9D3915"
+	"orange5": "#9D3915",
+	"grey1": "#6B656A"
   };
 
 function draw_area_figure1(data, chart_id, margin, width, height,chart_config){
@@ -260,7 +261,7 @@ svg.append("path")
 		  
 }
 
-function draw_area_figure_8(data, chart_id, margin, width, height,chart_config){
+function draw_area_figure8(data, chart_id, margin, width, height,chart_config){
 
 var dateParse = d3.timeParse("%d/%m/%Y");
 data.forEach(function(d){d.dd = dateParse(d.date);
@@ -274,8 +275,8 @@ var x = d3.scaleTime()
 
 // Add Y axis
 var y = d3.scaleLinear()
-  .domain([0, d3.max(data, function(d) { return +d.unclassified_c; })])
-  .range([ height, 0 ]).nice();
+  .domain([0, 100])
+  .range([ height, 0 ]);
   
 var svg = d3.select("#"+chart_id)
 .append("svg")
@@ -300,9 +301,20 @@ svg.append("text")
     .attr("dy", "1em")
     .attr('class','yaxistitle')
     .style("text-anchor", "middle")
-    .text("Regional COVID-19 cases");
+    .text("Share of COVID-19 funding received");
 
  // Add the area
+svg.append("path")
+    .datum(data)
+		.attr("fill", pal.grey1)
+		.attr("stroke", pal.grey1)
+		.attr("stroke-width", 1.5)
+		.attr("d", d3.area()
+		  .x(function(d) { return x(d.dd) })
+		  .y0(y(0))
+		  .y1(function(d) { return y(d.uncategorised_c*100) })
+		  )  
+
 svg.append("path")
     .datum(data)
 		.attr("fill", pal.orange5)
@@ -311,9 +323,9 @@ svg.append("path")
 		.attr("d", d3.area()
 		  .x(function(d) { return x(d.dd) })
 		  .y0(y(0))
-		  .y1(function(d) { return y(d.unclassified_c) })
-		  )  
-
+		  .y1(function(d) { return y(d.un_c*100) })
+		  ) 
+		  
 svg.append("path")
     .datum(data)
 		.attr("fill", pal.orange4)
@@ -322,9 +334,9 @@ svg.append("path")
 		.attr("d", d3.area()
 		  .x(function(d) { return x(d.dd) })
 		  .y0(y(0))
-		  .y1(function(d) { return y(d.UN_c) })
+		  .y1(function(d) { return y(d.who_c*100) })
 		  ) 
-		  
+  
 svg.append("path")
     .datum(data)
 		.attr("fill", pal.orange3)
@@ -333,9 +345,9 @@ svg.append("path")
 		.attr("d", d3.area()
 		  .x(function(d) { return x(d.dd) })
 		  .y0(y(0))
-		  .y1(function(d) { return y(d.WHO_c) })
-		  ) 
-  
+		  .y1(function(d) { return y(d.red_cross_c*100) })
+		  ) 	
+
 svg.append("path")
     .datum(data)
 		.attr("fill", pal.orange2)
@@ -344,9 +356,9 @@ svg.append("path")
 		.attr("d", d3.area()
 		  .x(function(d) { return x(d.dd) })
 		  .y0(y(0))
-		  .y1(function(d) { return y(d.Red_Cross_c) })
-		  ) 	
-
+		  .y1(function(d) { return y(d.ngos_c*100) })
+		  )
+		  
 svg.append("path")
     .datum(data)
 		.attr("fill", pal.orange1)
@@ -355,7 +367,7 @@ svg.append("path")
 		.attr("d", d3.area()
 		  .x(function(d) { return x(d.dd) })
 		  .y0(y(0))
-		  .y1(function(d) { return y(d.NGOs_c) })
+		  .y1(function(d) { return y(d.governments_c*100) })
 		  )
 		  
 }
