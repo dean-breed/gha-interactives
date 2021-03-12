@@ -19,8 +19,6 @@ var sumstat = d3.nest()
 .key(function(d) { return d.date;})
 .entries(data);
 
-
-
 var stackedData = d3.stack()
     .keys(groups)
     .value(function(d,key){return d.values[0][key]})(sumstat);
@@ -42,7 +40,7 @@ var x = d3.scaleTime()
 
 // Add Y axis
 var y = d3.scaleLinear()
-  .domain([0, d3.max(stackedData, function(d) { return d[43][1]/1000000; })])
+  .domain([0, d3.max(stackedData, function(d) {return d[d.length-1][1]/1000000; })])
   .range([ height, 0 ]).nice();
 
 svg.append("g")
@@ -63,6 +61,8 @@ svg.append("text")
     .style("text-anchor", "middle")
     .text("Regional COVID-19 cases (millions)");
 
+var day_month_format = d3.timeFormat("%d %B");
+
  // Add the area
  svg
     .selectAll("mylayers")
@@ -78,19 +78,18 @@ svg.append("text")
     .on("mouseover", function() { tooltip.style("display", null); })
     .on("mouseout", function() { tooltip.style("display", "none"); })
     .on("mousemove", function(d) {
-        var xPositionhold = d3.mouse(this)[0];
-        var yPositionhold = d3.mouse(this)[1];
-        var xPosition = x.invert(d3.mouse(this)[0]);
-        console.log(xPosition);
-        var yPosition = y.invert(d3.mouse(this)[1]);
-        var closest_year_distance = d3.min(stackedData, function(d,d_index){return Math.abs(xPosition - d[d_index].data.values[0].date)});
-        console.log(stackedData[0]);
-        var closest_year = stackedData[0].filter(function(d){return Math.abs(xPosition - d.data.values[0].date) == closest_year_distance})[0].data.values[0].date;
-        console.log(closest_year);
-        var closest_value = stackedData.filter(function(d,d_index){return Math.abs(xPosition - d[d_index].data.values[0].date) == closest_year_distance});
-        tooltip.attr("transform", "translate(" + (xPositionhold+10) + "," + yPositionhold + ")");
-        // tooltip.select("text").text(closest_year+", "+closest_value+"m")
-      });
+        var xPosition = d3.mouse(this)[0];
+        var yPosition = d3.mouse(this)[1];
+        d.forEach(function(d){d.x_pos = x(d.data.values[0].date);
+        d.day_month = day_month_format(d.data.values[0].date)});
+
+        var closest_year_distance = d3.min(d, function(i){return Math.abs(xPosition - i.x_pos)});
+   
+        var closest_year = d.filter(function(i){return Math.abs(xPosition - i.x_pos) == closest_year_distance});
+
+        tooltip.attr("transform", "translate(" + (xPosition + 10) + "," + yPosition + ")");
+        tooltip.select("text").text(d.key + ", "+closest_year[0].day_month+", "+((closest_year[0][1]-closest_year[0][0])/1000000).toFixed(2));
+    });
 
 var tooltip = svg.append("g")
     .attr("class", "tooltip")
@@ -167,17 +166,14 @@ svg.append("path")
     .on("mouseover", function() { tooltip.style("display", null); })
     .on("mouseout", function() { tooltip.style("display", "none"); })
     .on("mousemove", function(d) {
-        var xPositionhold = d3.mouse(this)[0];
-        var yPositionhold = d3.mouse(this)[1];
-        var xPosition = x.invert(d3.mouse(this)[0]);
-        var yPosition = y.invert(d3.mouse(this)[1]);
-        console.log(xPosition);
-        var closest_year_distance = d3.min(data, function(d){ return Math.abs(xPosition - d.dd)});
-        var closest_year = data.filter(function(d){return Math.abs(xPosition - d.dd) == closest_year_distance})[0].day_month;
-        var closest_value = data.filter(function(d){return Math.abs(xPosition - d.dd) == closest_year_distance})[0].covid_cases_m;
-        console.log(d);
-        tooltip.attr("transform", "translate(" + (xPositionhold+10) + "," + yPositionhold + ")");
-        tooltip.select("text").text(closest_year+", "+closest_value+"m")});
+        var xPosition = d3.mouse(this)[0]+5;
+        var yPosition = d3.mouse(this)[1];
+        var closest_year_distance = d3.min(d, function(i){console.log(i);return Math.abs(xPosition - i.data.values[0].date)});
+        console.log(closest_year_distance);
+        var closest_year = stackedData[0].filter(function(d){return Math.abs(xPosition - d.data.values[0].date) == closest_year_distance})[0].data.values[0].date;
+
+        tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+        tooltip.select("text").text(d.key + ", " + tooltip_formatter(d))}); 
 
 var tooltip = svg.append("g")
     .attr("class", "tooltip")
