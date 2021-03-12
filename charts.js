@@ -42,10 +42,8 @@ var x = d3.scaleTime()
 
 // Add Y axis
 var y = d3.scaleLinear()
-  .domain([0, d3.max(stackedData, function(d) { return d[43][1]; })])
+  .domain([0, d3.max(stackedData, function(d) { return d[43][1]/1000000; })])
   .range([ height, 0 ]).nice();
-svg.append("g")
-    .call(d3.axisLeft(y));
 
 svg.append("g")
     .attr("class", "axis")
@@ -63,7 +61,7 @@ svg.append("text")
     .attr("dy", "1em")
     .attr('class','yaxistitle')
     .style("text-anchor", "middle")
-    .text("Regional COVID-19 cases");
+    .text("Regional COVID-19 cases (millions)");
 
  // Add the area
  svg
@@ -74,8 +72,8 @@ svg.append("text")
       .style("fill", function(d) {return color(d.key)})
       .attr("d", d3.area()
         .x(function(d) { return x(d.data.values[0].date); })
-        .y0(function(d) { return y(d[0]); })
-        .y1(function(d) { return y(d[1]); })
+        .y0(function(d) { return y(d[0]/1000000); })
+        .y1(function(d) { return y(d[1]/1000000); })
     )
     .on("mouseover", function() { tooltip.style("display", null); })
     .on("mouseout", function() { tooltip.style("display", "none"); })
@@ -202,27 +200,39 @@ tooltip.append("text")
 
 function draw_area_figure2b(data, chart_id, margin, width, height,chart_config){
 
-var dateParse = d3.timeParse("%d/%m/%Y");
-data.forEach(function(d){d.dd = dateParse(d.date);
-                        d.day_month = d3.timeFormat("%d %b")(d.dd);
+var groups = ["all_paid","all_committed"];
 
+var dateParse = d3.timeParse("%d/%m/%Y");
+data.forEach(function(d){d.date = dateParse(d.date);
 });
 
+var sumstat = d3.nest()
+.key(function(d) { return d.date;})
+.entries(data);
+
+var stackedData = d3.stack()
+    .keys(groups)
+    .value(function(d,key){return d.values[0][key]})(sumstat);
+
+var svg = d3.select("#"+chart_id)
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var color = d3.scaleOrdinal()
+.domain(groups)
+.range([pal.orange1,pal.orange2]);
+
 var x = d3.scaleTime()
-    .domain(d3.extent(data, function(d) { return d.dd; }))
-    .range([ 0, width ])
+    .domain(d3.extent(data, function(d) { return d.date; }))
+    .range([ 0, width ]).nice();
 
 // Add Y axis
 var y = d3.scaleLinear()
   .domain([0, d3.max(data, function(d) { return +d.all_total/1000000000; })])
   .range([ height, 0 ]).nice();
-  
-var svg = d3.select("#"+chart_id)
-.append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("g")
     .attr("class", "axis")
@@ -243,53 +253,56 @@ svg.append("text")
     .text("COVID-19 emergency funding (US$ billions)");
 
  // Add the area
-svg.append("path")
-    .datum(data)
-		.attr("fill", pal.orange2)
-		.attr("stroke", pal.orange2)
-		.attr("stroke-width", 1.5)
-		.attr("d", d3.area()
-		  .x(function(d) { return x(d.dd) })
-		  .y0(y(0))
-		  .y1(function(d) { return y(d.all_total/1000000000) })
-		  )  
-
-svg.append("path")
-    .datum(data)
-		.attr("fill", pal.orange1)
-		.attr("stroke", pal.orange1)
-		.attr("stroke-width", 1.5)
-		.attr("d", d3.area()
-		  .x(function(d) { return x(d.dd) })
-		  .y0(y(0))
-		  .y1(function(d) { return y(d.all_committed/1000000000) })
-		  ) 
-		  
+ svg
+    .selectAll("mylayers")
+    .data(stackedData)
+    .enter()
+    .append("path")
+      .style("fill", function(d) {return color(d.key)})
+      .attr("d", d3.area()
+        .x(function(d) { return x(d.data.values[0].date); })
+        .y0(function(d) { return y(d[0]/1000000000); })
+        .y1(function(d) { return y(d[1]/1000000000); })
+    )
 }
 
 function draw_area_figure8(data, chart_id, margin, width, height,chart_config){
 
-var dateParse = d3.timeParse("%d/%m/%Y");
-data.forEach(function(d){d.dd = dateParse(d.date);
-                        d.day_month = d3.timeFormat("%d %b")(d.dd);
+var groups = ["governments","ngos","red_cross","who","un","uncategorised"];
 
+var dateParse = d3.timeParse("%d/%m/%Y");
+data.forEach(function(d){d.date = dateParse(d.date);
 });
 
+var sumstat = d3.nest()
+.key(function(d) { return d.date;})
+.entries(data);
+
+
+
+var stackedData = d3.stack()
+    .keys(groups)
+    .value(function(d,key){return d.values[0][key]})(sumstat);
+
+var svg = d3.select("#"+chart_id)
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var color = d3.scaleOrdinal()
+.domain(groups)
+.range([pal.orange1,pal.orange2,pal.orange3,pal.orange4,pal.orange5,pal.grey1]);
+
 var x = d3.scaleTime()
-    .domain(d3.extent(data, function(d) { return d.dd; }))
-    .range([ 0, width ])
+    .domain(d3.extent(data, function(d) { return d.date; }))
+    .range([ 0, width ]).nice();
 
 // Add Y axis
 var y = d3.scaleLinear()
   .domain([0, 100])
-  .range([ height, 0 ]);
-  
-var svg = d3.select("#"+chart_id)
-.append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  .range([ height, 0 ]).nice();
 
 svg.append("g")
     .attr("class", "axis")
@@ -307,73 +320,52 @@ svg.append("text")
     .attr("dy", "1em")
     .attr('class','yaxistitle')
     .style("text-anchor", "middle")
-    .text("Share of COVID-19 funding received");
+    .text("Share of COVID-19 funding received (%)");
 
  // Add the area
-svg.append("path")
-    .datum(data)
-		.attr("fill", pal.grey1)
-		.attr("stroke", pal.grey1)
-		.attr("stroke-width", 1.5)
-		.attr("d", d3.area()
-		  .x(function(d) { return x(d.dd) })
-		  .y0(y(0))
-		  .y1(function(d) { return y(d.uncategorised_c*100) })
-		  )  
+ svg
+    .selectAll("mylayers")
+    .data(stackedData)
+    .enter()
+    .append("path")
+      .style("fill", function(d) {return color(d.key)})
+      .attr("d", d3.area()
+        .x(function(d) { return x(d.data.values[0].date); })
+        .y0(function(d) { return y(d[0]*100); })
+        .y1(function(d) { return y(d[1]*100); })
+    )
+    .on("mouseover", function() { tooltip.style("display", null); })
+    .on("mouseout", function() { tooltip.style("display", "none"); })
+    .on("mousemove", function(d) {
+        var xPositionhold = d3.mouse(this)[0];
+        var yPositionhold = d3.mouse(this)[1];
+        var xPosition = x.invert(d3.mouse(this)[0]);
+        console.log(xPosition);
+        var yPosition = y.invert(d3.mouse(this)[1]);
+        var closest_year_distance = d3.min(stackedData, function(d,d_index){return Math.abs(xPosition - d[d_index].data.values[0].date)});
+        console.log(stackedData[0]);
+        var closest_year = stackedData[0].filter(function(d){return Math.abs(xPosition - d.data.values[0].date) == closest_year_distance})[0].data.values[0].date;
+        console.log(closest_year);
+        var closest_value = stackedData.filter(function(d,d_index){return Math.abs(xPosition - d[d_index].data.values[0].date) == closest_year_distance});
+        tooltip.attr("transform", "translate(" + (xPositionhold+10) + "," + yPositionhold + ")");
+        // tooltip.select("text").text(closest_year+", "+closest_value+"m")
+      });
 
-svg.append("path")
-    .datum(data)
-		.attr("fill", pal.orange5)
-		.attr("stroke", pal.orange5)
-		.attr("stroke-width", 1.5)
-		.attr("d", d3.area()
-		  .x(function(d) { return x(d.dd) })
-		  .y0(y(0))
-		  .y1(function(d) { return y(d.un_c*100) })
-		  ) 
-		  
-svg.append("path")
-    .datum(data)
-		.attr("fill", pal.orange4)
-		.attr("stroke", pal.orange4)
-		.attr("stroke-width", 1.5)
-		.attr("d", d3.area()
-		  .x(function(d) { return x(d.dd) })
-		  .y0(y(0))
-		  .y1(function(d) { return y(d.who_c*100) })
-		  ) 
+var tooltip = svg.append("g")
+    .attr("class", "tooltip")
+    .style("display", "none");   
+        
+tooltip.append("rect")
+    .attr("width", 100)
+    .attr("height", 20)
+    .attr("fill", "white")
+    .style("opacity", 0);
   
-svg.append("path")
-    .datum(data)
-		.attr("fill", pal.orange3)
-		.attr("stroke", pal.orange3)
-		.attr("stroke-width", 1.5)
-		.attr("d", d3.area()
-		  .x(function(d) { return x(d.dd) })
-		  .y0(y(0))
-		  .y1(function(d) { return y(d.red_cross_c*100) })
-		  ) 	
-
-svg.append("path")
-    .datum(data)
-		.attr("fill", pal.orange2)
-		.attr("stroke", pal.orange2)
-		.attr("stroke-width", 1.5)
-		.attr("d", d3.area()
-		  .x(function(d) { return x(d.dd) })
-		  .y0(y(0))
-		  .y1(function(d) { return y(d.ngos_c*100) })
-		  )
-		  
-svg.append("path")
-    .datum(data)
-		.attr("fill", pal.orange1)
-		.attr("stroke", pal.orange1)
-		.attr("stroke-width", 1.5)
-		.attr("d", d3.area()
-		  .x(function(d) { return x(d.dd) })
-		  .y0(y(0))
-		  .y1(function(d) { return y(d.governments_c*100) })
-		  )
-		  
+tooltip.append("text")
+    .attr("x", 2)
+    .attr("dy", "1.2em")
+    .style("text-anchor", "left")
+    .attr("font-size", "12px")
+    .attr("font-weight", "bold");
+ 		  
 }
