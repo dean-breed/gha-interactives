@@ -49,20 +49,20 @@ var y = d3.scaleLinear()
 var gridlines = d3.axisLeft()
     .tickFormat("")
 	.ticks(5)
-	.tickSize(-width)
+	.tickSize(-width+2)
     .scale(y);
 
- svg.append("g")
+svg.append("g")
     .attr("class", "grid")
     .call(gridlines);
 
 svg.append("g")
-    .attr("class", "axis")
+    .attr("class", "xaxis")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).ticks(d3.timeMonth.every(2)).tickFormat(d3.timeFormat("%b")));
+    .call(d3.axisBottom(x).ticks(d3.timeMonth.every(2)).tickFormat(d3.timeFormat("%b")).tickSize(0).tickPadding(6));
 
 svg.append("g")
-	.attr("class", "axis")
+	.attr("class", "yaxis")
     .call(d3.axisLeft(y).ticks(5).tickSize(0).tickPadding(6));
 	
 svg.append("text")
@@ -152,30 +152,12 @@ var svg = d3.select("#"+chart_id)
 var gridlines = d3.axisLeft()
     .tickFormat("")
 	.ticks(5)
-	.tickSize(-width)
+	.tickSize(-width+2)
     .scale(y);
 
 svg.append("g")
     .attr("class", "grid")
     .call(gridlines);
-
-svg.append("g")
-    .attr("class", "axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).ticks(d3.timeMonth.every(2)).tickFormat(d3.timeFormat("%b")));
-
-svg.append("g")
-    .attr("class", "axis")  
-    .call(d3.axisLeft(y).ticks(5).tickSize(0).tickPadding(6));
-	
-svg.append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 0-margin.left)
-    .attr("x",0 - (height / 1.8))
-    .attr("dy", "1em")
-    .attr('class','yaxistitle')
-    .style("text-anchor", "middle")
-    .text("Covid-19 cases (millions)");
 
   // Add the area
 svg.append("path")
@@ -205,6 +187,24 @@ svg.append("path")
         tooltip.style("display", "inline-block");
         tooltip.html(closest_year+"<br/>"+closest_value+"m")
 		});
+
+svg.append("g")
+    .attr("class", "xaxis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x).ticks(d3.timeMonth.every(2)).tickFormat(d3.timeFormat("%b")).tickSize(0).tickPadding(6));
+
+svg.append("g")
+    .attr("class", "yaxis")  
+    .call(d3.axisLeft(y).ticks(5).tickSize(0).tickPadding(6));
+	
+svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0-margin.left)
+    .attr("x",0 - (height / 1.8))
+    .attr("dy", "1em")
+    .attr('class','yaxistitle')
+    .style("text-anchor", "middle")
+    .text("Covid-19 cases (millions)");
 
 var tooltip = d3.select("#"+chart_id)
 	.append("div")
@@ -256,7 +256,7 @@ var day_month_format = d3.timeFormat("%d %b");
 var gridlines = d3.axisLeft()
     .tickFormat("")
 	.ticks(5)
-	.tickSize(-width)
+	.tickSize(-width+2)
     .scale(y);
 
  svg.append("g")
@@ -264,12 +264,12 @@ var gridlines = d3.axisLeft()
     .call(gridlines);
 
 svg.append("g")
-    .attr("class", "axis")
+    .attr("class", "xaxis")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).ticks(d3.timeMonth.every(2)).tickFormat(d3.timeFormat("%b")));
+    .call(d3.axisBottom(x).ticks(d3.timeMonth.every(2)).tickFormat(d3.timeFormat("%b")).tickSize(0).tickPadding(6));
 
 svg.append("g")
-    .attr("class", "axis")  
+    .attr("class", "yaxis")  
     .call(d3.axisLeft(y).ticks(5).tickSize(0).tickPadding(6));
 	
 svg.append("text")
@@ -372,7 +372,7 @@ var day_month_format = d3.timeFormat("%d %b");
 var gridlines = d3.axisLeft()
     .tickFormat("")
 	.ticks(5)
-	.tickSize(-width)
+	.tickSize(-width+2)
     .scale(y);
 
  svg.append("g")
@@ -380,12 +380,12 @@ var gridlines = d3.axisLeft()
     .call(gridlines);
 
 svg.append("g")
-    .attr("class", "axis")
+    .attr("class", "xaxis")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).ticks(d3.timeMonth.every(1)).tickFormat(d3.timeFormat("%b")));
+    .call(d3.axisBottom(x).ticks(d3.timeMonth.every(1)).tickFormat(d3.timeFormat("%b")).tickSize(0).tickPadding(6));
 
 svg.append("g")
-    .attr("class", "axis")  
+    .attr("class", "yaxis")  
     .call(d3.axisLeft(y).ticks(5).tickSize(0).tickPadding(6));
 	
 svg.append("text")
