@@ -27,10 +27,10 @@ var stackedData = d3.stack()
 
 var svg = d3.select("#"+chart_id)
     .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr('preserveAspectRatio', 'xMinYMin meet')
+        .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
 var color = d3.scaleOrdinal()
 	.domain(groups)
@@ -176,11 +176,11 @@ var y = d3.scaleLinear()
   .range([ height, 0 ]).nice();
 	
 var svg = d3.select("#"+chart_id)
-.append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .append("svg")
+        .attr('preserveAspectRatio', 'xMinYMin meet')
+        .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
+        .append("g")
+        .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
 var gridlines = d3.axisLeft()
     .tickFormat("")
@@ -296,10 +296,10 @@ var stackedData = d3.stack()
 
 var svg = d3.select("#"+chart_id)
     .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr('preserveAspectRatio', 'xMinYMin meet')
+        .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
 var color = d3.scaleOrdinal()
 	.domain(groups)
@@ -447,10 +447,10 @@ var stackedData = d3.stack()
 
 var svg = d3.select("#"+chart_id)
     .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr('preserveAspectRatio', 'xMinYMin meet')
+        .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
 var color = d3.scaleOrdinal()
 	.domain(groups)
@@ -474,7 +474,7 @@ var gridlines = d3.axisLeft()
 	.tickSize(-width+2)
     .scale(y);
 
- svg.append("g")
+svg.append("g")
     .attr("class", "grid")
     .call(gridlines);
 
