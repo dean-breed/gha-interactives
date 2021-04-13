@@ -24,23 +24,11 @@
 	  .yaxis text {font-size:12px; font-weight: 100; fill:#a9a6aa ; font-family: 'Geomanist'; }
       .yaxis line {stroke:transparent;}
       .yaxis path {stroke:transparent;}
-      .toolTip {
-        font-family: "Geomanist";
-        position: absolute;
-        display: none;
-        width: auto;
-        height: auto;
-        background: none repeat scroll 0 0 white;
-        border: 0 none;
-        border-radius: 0px 0px 0px 0px;
-        box-shadow: -0px 0px 2px #443e42;
-        color: black;
-        font: 12px Geomanist;
-		font-weight: regular;
-        padding: 5px;
-        text-align: left;
+      .tooltip {pointer-events: none;}
+      .tooltip-bg {
+	  box-shadow: -0px 0px 2px #443e42;
+	  pointer-events: none;
 	  }
-      .tooltip-bg {pointer-events: none;}
 	  .legendOrdinal{font-size:14px; font-weight: 100; fill:#443e42; font-family: 'Geomanist'; }
 	  .grid line {
 		stroke: #a9a6aa;
