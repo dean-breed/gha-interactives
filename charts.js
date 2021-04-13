@@ -97,8 +97,8 @@ var day_month_format = d3.timeFormat("%d %b");
         d.forEach(function(d){d.x_pos = x(d.data.values[0].date);
         d.day_month = day_month_format(d.data.values[0].date)});
 
-		tooltip.style("left", d3.event.pageX-800+"px");
-        tooltip.style("top", d3.event.pageY-800+"px");
+		tooltip.style("left", d3.event.pageX+20+"px");
+        tooltip.style("top", d3.event.pageY-25+"px");
         tooltip.style("display", "inline-block");
 		
 		var closest_year_distance = d3.min(d, function(i){return Math.abs(xPosition - i.x_pos)});
